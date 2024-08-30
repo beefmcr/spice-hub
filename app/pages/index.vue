@@ -1,6 +1,16 @@
 <template>
   <div class="h-dvh flex flex-col md:flex-row">
-    <!-- Removed USlideover and its content -->
+    <USlideover
+      v-model="isDrawerOpen"
+      class="md:hidden"
+      :ui="{ width: 'max-w-xs' }"
+    >
+      <LlmSettings
+        v-model:llmParams="llmParams"
+        @hide-drawer="isDrawerOpen = false"
+        @reset="resetSettings"
+      />
+    </USlideover>
 
     <div class="hidden md:block md:w-1/3 lg:w-1/4">
       <LlmSettings v-model:llmParams="llmParams" @reset="resetSettings" />
@@ -14,7 +24,7 @@
         :loading="loading"
         @clear="chatHistory = []"
         @message="sendMessage"
-        <!-- Removed @show-drawer event listener -->
+        @show-drawer="isDrawerOpen = true"
       />
     </div>
   </div>
@@ -23,7 +33,7 @@
 <script setup lang="ts">
 import type { ChatMessage, LlmParams, LoadingType } from '~~/types';
 
-// Removed isDrawerOpen reference
+const isDrawerOpen = ref(false);
 
 const defaultSettings: LlmParams = {
   model: '@cf/meta/llama-3.1-8b-instruct',
